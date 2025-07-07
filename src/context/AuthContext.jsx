@@ -1,72 +1,151 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useCallback, useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+const initialState = {
+  user: null,
+  isAuthenticated: false,
+  loading: false,
+  error: null,
+};
 
+const authReducer = (state, action) => {
+  switch (action.type) {
+    case 'SET_LOADING':
+      return { ...state, loading: action.payload };
+    case 'SET_ERROR':
+      return { ...state, error: action.payload, loading: false };
+    case 'LOGIN_SUCCESS':
+      return {
+        ...state,
+        user: action.payload,
+        isAuthenticated: true,
+        loading: false,
+        error: null,
+      };
+    case 'LOGOUT':
+      return {
+        ...state,
+        user: null,
+        isAuthenticated: false,
+        loading: false,
+        error: null,
+      };
+    case 'UPDATE_PROFILE':
+      return {
+        ...state,
+        user: { ...state.user, ...action.payload },
+      };
+    default:
+      return state;
+  }
+};
+
+export const AuthProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(authReducer, initialState);
+
+  // Check for existing session on app load
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      try {
+        const user = JSON.parse(savedUser);
+        dispatch({ type: 'LOGIN_SUCCESS', payload: user });
+      } catch (error) {
+        localStorage.removeItem('user');
+      }
     }
-    setIsLoading(false);
   }, []);
 
-  const login = async (email, password) => {
-    // Simulate API call
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (email === 'demo@example.com' && password === 'password') {
-          const userData = {
-            id: '1',
-            name: 'Harsh Gupta ',
-            email: 'harsh@demo.com',
-            phone:'+91 999999999',
-            address:'Galgotias University',
-            avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150'
-          };
-          setUser(userData);
-          localStorage.setItem('user', JSON.stringify(userData));
-          resolve(userData);
-        } else {
-          reject(new Error('Invalid credentials'));
+  const login = useCallback(async (email, password) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    
+    try {
+      // Simulate API call - replace with real authentication
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Mock user data - replace with real API response
+      const userData = {
+        id: Date.now(),
+        email,
+        name: email.split('@')[0],
+        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
+        joinDate: new Date().toISOString(),
+        preferences: {
+          notifications: true,
+          newsletter: true,
         }
-      }, 1000);
-    });
-  };
+      };
 
-  const register = async (name, email, password) => {
-    // Simulate API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const userData = {
-          id: Date.now().toString(),
-          name,
-          email,
-          avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150'
-        };
-        setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
-        resolve(userData);
-      }, 1000);
-    });
-  };
+      localStorage.setItem('user', JSON.stringify(userData));
+      dispatch({ type: 'LOGIN_SUCCESS', payload: userData });
+      toast.success('Welcome back!');
+      
+      return userData;
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', payload: error.message });
+      toast.error('Login failed. Please try again.');
+      throw error;
+    }
+  }, []);
 
-  const logout = () => {
-    setUser(null);
+  const register = useCallback(async (name, email, password) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const userData = {
+        id: Date.now(),
+        email,
+        name,
+        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
+        joinDate: new Date().toISOString(),
+        preferences: {
+          notifications: true,
+          newsletter: false,
+        }
+      };
+
+      localStorage.setItem('user', JSON.stringify(userData));
+      dispatch({ type: 'LOGIN_SUCCESS', payload: userData });
+      toast.success('Account created successfully!');
+      
+      return userData;
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', payload: error.message });
+      toast.error('Registration failed. Please try again.');
+      throw error;
+    }
+  }, []);
+
+  const logout = useCallback(() => {
     localStorage.removeItem('user');
+    localStorage.removeItem('wishlist');
+    localStorage.removeItem('cart');
+    dispatch({ type: 'LOGOUT' });
+    toast.success('Logged out successfully');
+  }, []);
+
+  const updateProfile = useCallback((updates) => {
+    const updatedUser = { ...state.user, ...updates };
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    dispatch({ type: 'UPDATE_PROFILE', payload: updates });
+    toast.success('Profile updated successfully');
+  }, [state.user]);
+
+  const value = {
+    ...state,
+    login,
+    register,
+    logout,
+    updateProfile,
   };
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      isLoading,
-      login,
-      register,
-      logout
-    }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
