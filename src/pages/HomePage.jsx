@@ -26,7 +26,7 @@ const HomePage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-2xl p-8 md:p-12 relative overflow-hidden"
+        className="relative p-8 overflow-hidden text-white bg-gradient-to-r from-pink-600 to-pink-800 rounded-2xl md:p-12"
       >
         <div className="absolute inset-0 bg-black opacity-10"></div>
         <div className="max-w-3xl">
@@ -34,7 +34,7 @@ const HomePage = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl md:text-6xl font-bold mb-4"
+            className="mb-4 text-4xl font-bold md:text-6xl"
           >
             {isAuthenticated ? `Welcome back, ${user?.name}!` : 'Discover Amazing Products'}
           </motion.h1>
@@ -42,7 +42,7 @@ const HomePage = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl md:text-2xl mb-8 text-blue-100"
+            className="mb-8 text-xl text-blue-100 md:text-2xl"
           >
             Explore our curated collection of products from various categories
           </motion.p>
@@ -50,17 +50,17 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4"
+            className="flex flex-col gap-4 sm:flex-row"
           >
             <Link
               to="/products"
-              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center transform hover:scale-105"
+              className="px-8 py-3 font-semibold text-center text-blue-600 transition-colors transform bg-white rounded-lg hover:bg-gray-100 hover:scale-105"
             >
               Shop Now
             </Link>
             <Link
               to="/manage"
-              className="bg-blue-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-400 transition-colors text-center transform hover:scale-105"
+              className="px-8 py-3 font-semibold text-center text-white transition-colors transform bg-blue-500 rounded-lg hover:bg-blue-400 hover:scale-105"
             >
               Manage Products
             </Link>
@@ -74,23 +74,23 @@ const HomePage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white rounded-2xl shadow-lg p-8"
+          className="p-8 bg-white shadow-lg rounded-2xl"
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div className="grid grid-cols-1 gap-8 text-center md:grid-cols-3">
             <div>
-              <div className="text-3xl font-bold text-blue-600 mb-2">
+              <div className="mb-2 text-3xl font-bold text-blue-600">
                 <AnimatedCounter value={products.length} />
               </div>
               <p className="text-gray-600">Total Products</p>
             </div>
             <div>
-              <div className="text-3xl font-bold text-green-600 mb-2">
+              <div className="mb-2 text-3xl font-bold text-green-600">
                 <AnimatedCounter value={new Set(products.map(p => p.category)).size} />
               </div>
               <p className="text-gray-600">Categories</p>
             </div>
             <div>
-              <div className="text-3xl font-bold text-purple-600 mb-2">
+              <div className="mb-2 text-3xl font-bold text-purple-600">
                 <AnimatedCounter 
                   value={Math.round(products.reduce((sum, p) => sum + (parseFloat(p.price) || 0), 0) / products.length)} 
                 />
@@ -104,22 +104,22 @@ const HomePage = () => {
       {/* Legacy Hero Content - keeping for reference */}
       <div className="hidden">
         <div className="max-w-3xl">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          <h1 className="mb-4 text-4xl font-bold md:text-6xl">
             Discover Amazing Products
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-blue-100">
+          <p className="mb-8 text-xl text-blue-100 md:text-2xl">
             Explore our curated collection of products from various categories
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row">
             <Link
               to="/products"
-              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center"
+              className="px-8 py-3 font-semibold text-center text-blue-600 transition-colors bg-white rounded-lg hover:bg-gray-100"
             >
               Shop Now
             </Link>
             <Link
               to="/manage"
-              className="bg-blue-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-400 transition-colors text-center"
+              className="px-8 py-3 font-semibold text-center text-white transition-colors bg-blue-500 rounded-lg hover:bg-blue-400"
             >
               Manage Products
             </Link>
@@ -132,7 +132,7 @@ const HomePage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        className="grid grid-cols-1 gap-6 md:grid-cols-3"
       >
         {[
           {
@@ -163,10 +163,10 @@ const HomePage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: feature.delay }}
             whileHover={{ y: -5 }}
-            className="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-all duration-300"
+            className="p-6 text-center transition-all duration-300 bg-white rounded-lg shadow-md hover:shadow-lg"
           >
             <feature.icon className={`h-12 w-12 ${feature.color} mx-auto mb-4`} />
-            <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+            <h3 className="mb-2 text-xl font-semibold">{feature.title}</h3>
             <p className="text-gray-600">{feature.description}</p>
           </motion.div>
         ))}
@@ -174,23 +174,23 @@ const HomePage = () => {
 
       {/* Legacy Features - keeping for reference */}
       <div className="hidden">
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <ShoppingBag className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold mb-2">Wide Selection</h3>
+        <div className="p-6 text-center bg-white rounded-lg shadow-md">
+          <ShoppingBag className="w-12 h-12 mx-auto mb-4 text-blue-600" />
+          <h3 className="mb-2 text-xl font-semibold">Wide Selection</h3>
           <p className="text-gray-600">
             Browse through thousands of products across multiple categories
           </p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <TrendingUp className="h-12 w-12 text-green-600 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold mb-2">Trending Products</h3>
+        <div className="p-6 text-center bg-white rounded-lg shadow-md">
+          <TrendingUp className="w-12 h-12 mx-auto mb-4 text-green-600" />
+          <h3 className="mb-2 text-xl font-semibold">Trending Products</h3>
           <p className="text-gray-600">
             Discover the most popular items and latest trends
           </p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <Star className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold mb-2">Quality Assured</h3>
+        <div className="p-6 text-center bg-white rounded-lg shadow-md">
+          <Star className="w-12 h-12 mx-auto mb-4 text-yellow-500" />
+          <h3 className="mb-2 text-xl font-semibold">Quality Assured</h3>
           <p className="text-gray-600">
             All products are carefully selected and quality checked
           </p>
@@ -216,7 +216,7 @@ const HomePage = () => {
           <h2 className="text-3xl font-bold text-gray-900">Featured Products</h2>
           <Link
             to="/products"
-            className="text-blue-600 hover:text-blue-700 font-medium"
+            className="font-medium text-blue-600 hover:text-blue-700"
           >
             View All →
           </Link>
