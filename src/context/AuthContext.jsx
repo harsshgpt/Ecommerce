@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 const AuthContext = createContext();
 
 const initialState = {
-  user: null,
+  user: null, 
   isAuthenticated: false,
   loading: false,
   error: null,
