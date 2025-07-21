@@ -61,7 +61,7 @@ export const ProductProvider = ({ children }) => {
 
   const fetchProducts = useCallback(async (page = 1, limit = 20) => {
     dispatch({ type: 'SET_LOADING', payload: true });
-    try {
+    try { 
       const data = await productAPI.getProducts(page, limit);
       dispatch({ type: 'SET_PRODUCTS', payload: data.products || [] });
       dispatch({ type: 'SET_PAGINATION', payload: { currentPage: page, limit } });

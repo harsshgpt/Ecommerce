@@ -52,7 +52,7 @@ export const WishlistProvider = ({ children }) => {
       dispatch({ type: 'CLEAR_WISHLIST' });
     }
   }, [user, isAuthenticated]);
-
+ 
   // Save wishlist to localStorage whenever it changes
   useEffect(() => {
     if (isAuthenticated && user) {
